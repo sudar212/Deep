@@ -1,15 +1,23 @@
 import streamlit as st
-from tensorflow.keras.models import load_model
-from tensorflow.keras.preprocessing import image
 import numpy as np
+from tensorflow.keras.preprocessing import image
 from PIL import Image
+import gdown
+import os
+from tensorflow.keras.models import load_model
 
-# Title
-st.title("🧠 Brain Tumor Detection App")
-st.markdown("Upload an MRI scan image to check for brain tumor.")
+# Download model from Google Drive if not exists
+model_path = "brain_tumor_classifier.h5"
+if not os.path.exists(model_path):
+    file_id = "1wldsM6aVGXagXNmpbKA6liT0HXH6wQFB"
+    gdown.download(f"https://drive.google.com/uc?id={file_id}", model_path, quiet=False)
 
 # Load model
-model = load_model("brain_tumor_classifier.h5")
+model = load_model(model_path)
+
+# Streamlit UI
+st.title("🧠 Brain Tumor Detection App")
+st.markdown("Upload an MRI scan image to check for brain tumor.")
 
 # Upload image
 uploaded_file = st.file_uploader("Choose MRI Image", type=["jpg", "jpeg", "png"])
